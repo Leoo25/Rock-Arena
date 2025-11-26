@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Caixa de Entrada{% endblock %}
+{% block main_class %}p-0 m-0{% endblock %}
+{% block content %}
+<div class="auth-bg" style="min-height: 90vh; align-items: flex-start; padding-top: 100px;">
+<div class="container">
+<div class="row justify-content-center">
+<div class="col-lg-10">
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-white m-0" style="font-family: 'Metal Mania', cursive; font-size: 3rem; text-shadow: 2px 2px 0 #dc3545;">
+        Mensagens Recebidas
+    </h2>
+    <span class="badge bg-danger fs-6">Admin Zone</span>
+</div>
+{% if mensagens_contato %}
+    <div class="row g-4">
+        {% for msg in mensagens_contato %}
+        <div class="col-12">
+            <div class="card bg-dark text-white border-secondary shadow-sm card-hover-effect">
+                <div class="card-header border-secondary d-flex justify-content-between align-items-center bg-black-rock">
+                    <div>
+                        <strong class="text-danger fs-5">{{ msg.nome }}</strong>
+                        <br>
+                        <small class="text-muted">{{ msg.email }}</small>
+                    </div>
+                    <span class="badge bg-secondary">{{ msg.criado_em|date:"d/m/Y H:i" }}</span>
+                </div>
+                <div class="card-body" style="background-color: #151515;">
+                    <p class="card-text fs-5" style="white-space: pre-wrap;">{{ msg.mensagem }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-dark border-secondary text-center p-5">
+        <h3 class="text-muted mb-3" style="font-family: 'New Rocker', cursive;">Nenhum grito ouvido...</h3>
+        <p class="text-secondary">A caixa de entrada está vazia no momento.</p>
+    </div>
+{% endif %}
+<div class="text-center mt-5">
+    <a href="{% url 'index' %}" class="text-secondary text-decoration-none">
+        <i class="bi bi-arrow-left"></i> Voltar para o Palco Principal
+    </a>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}

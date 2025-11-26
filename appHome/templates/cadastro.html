@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block title %}Novo Integrante{% endblock %}
+{% block main_class %}p-0 m-0{% endblock %}
+{% block content %}
+<div class="auth-bg">
+<div class="card card-auth p-4 p-md-5">
+<h2 class="text-center mb-4">Cadastro</h2>
+<form method="post" action="{% url 'cadastro' %}">
+{% csrf_token %}
+{% for field in form %}
+<div class="mb-3">
+    <label for="{{ field.id_for_label }}" class="form-label text-uppercase small text-secondary fw-bold">
+        {{ field.label }}
+    </label>
+    {{ field }}
+    
+    {% if field.help_text %}
+        <div class="form-text small opacity-75">{{ field.help_text }}</div>
+    {% endif %}
+    
+    {% if field.errors %}
+        <div class="text-danger small mt-1 fw-bold">
+            {{ field.errors|striptags }}
+        </div>
+    {% endif %}
+</div>
+{% endfor %}
+
+    <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-danger btn-lg fw-bold shadow">
+            FINALIZAR CADASTRO
+        </button>
+    </div>
+</form>
+<div class="text-center mt-4 pt-3 border-top border-secondary">
+    <p class="mb-0">Já tem credencial?</p>
+    <a href="{% url 'login' %}" class="text-uppercase">Faça Login</a>
+</div>
+</div>
+</div>
+{% endblock content %}

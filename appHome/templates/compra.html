@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block title %}Finalizar Aquisição{% endblock %}
+
+{% block main_class %}p-0 m-0{% endblock %}
+
+{% block content %}
+<div class="auth-bg" style="min-height: 90vh; padding-top: 80px; padding-bottom: 40px;">
+<div class="container-fluid px-4 px-lg-5">
+<div class="row justify-content-center">
+<div class="col-12">
+<div class="card card-auth p-0 overflow-hidden shadow-lg border-2 border-danger" style="background-color: #111; max-width: 1600px; margin: 0 auto;">
+<div class="row g-0">
+<div class="col-lg-8 bg-black p-4 border-end border-secondary">
+    <div class="row h-100 align-items-center">
+        <div class="col-md-5 text-center mb-4 mb-md-0">
+            <div class="bg-white p-3 rounded shadow d-flex align-items-center justify-content-center mx-auto" style="height: 300px; width: 100%; max-width: 400px;">
+                <img src="{{ produto.foto.url }}" class="img-fluid" alt="{{ produto.nome }}" style="max-height: 100%; object-fit: contain;">
+            </div>
+        </div>
+        <div class="col-md-7 text-center text-md-start ps-md-4">
+            <h2 class="text-danger mb-3" 
+                style="font-family: 'Metal Mania', cursive; 
+                        font-size: clamp(2rem, 4vw, 3.5rem); 
+                        line-height: 1; 
+                        text-shadow: 2px 2px 0 #000;">
+                {{ produto.nome }}
+            </h2>
+            
+            <div class="text-secondary mb-4 small" style="font-family: 'Roboto', sans-serif;">
+                {{ produto.descricao|truncatechars:150 }}
+            </div>
+
+            <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-4">
+                <div>
+                    <p class="mb-0 text-uppercase text-muted small fw-bold">Preço Unitário</p>
+                    <h3 class="text-white m-0 fw-bold display-6">R$ {{ produto.preco|floatformat:2 }}</h3>
+                </div>
+                <span class="badge bg-dark border border-secondary p-2 align-self-center">
+                    Estoque: {{ produto.estoque }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-4 p-4 p-xl-5 d-flex flex-column justify-content-center bg-dark-gradient" 
+    style="background: linear-gradient(180deg, #151515 0%, #0a0a0a 100%); min-height: 500px;">
+        <h3 class="text-white mb-4 border-bottom border-danger pb-2" style="font-family: 'Roboto', sans-serif;">
+            Finalizar Pedido
+        </h3>
+        <form method="post" action="{% url 'compra' produto.id %}">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-4">
+                    <label for="{{ field.id_for_label }}" class="form-label text-uppercase small text-secondary fw-bold">
+                        {{ field.label }}
+                    </label>
+                    {{ field|attr:"id:input-qtd" }}
+                    {% if field.errors %}
+                        <div class="text-danger small mt-1 fw-bold">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="alert alert-dark border-danger mb-4 text-center p-3 shadow-sm">
+                <small class="text-uppercase text-muted fw-bold" style="letter-spacing: 1px;">Total a Pagar</small>
+                <h2 class="text-danger fw-bold m-0 mt-1" id="total-display" style="font-family: 'Metal Mania', cursive; letter-spacing: 2px; font-size: 2.5rem;">
+                    R$ 0,00
+                </h2>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-danger btn-lg fw-bold shadow text-uppercase py-3 hover-scale">
+                    CONFIRMAR 🤘
+                </button>
+                <a href="{% url 'index' %}" class="btn btn-outline-secondary btn-sm mt-2">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}
+{% block extra_js %}
+<script>
+const precoUnitario = parseFloat("{{ produto.preco|stringformat:'.2f' }}");
+const inputQtd = document.getElementById('input-qtd');
+const totalDisplay = document.getElementById('total-display');
+
+function atualizarTotal() {
+    const qtd = parseInt(inputQtd.value) || 0;
+    const total = (qtd * precoUnitario).toFixed(2);
+    totalDisplay.innerText = `R$ ${total.replace('.', ',')}`;
+}
+
+if(inputQtd) {
+    inputQtd.addEventListener('input', atualizarTotal);
+    inputQtd.addEventListener('change', atualizarTotal);
+    atualizarTotal(); 
+}
+</script>
+{% endblock %}

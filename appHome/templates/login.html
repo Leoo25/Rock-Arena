@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block title %}Acesso ao Backstage{% endblock %}
+{% block main_class %}p-0 m-0{% endblock %}
+{% block content %}
+<div class="auth-bg">
+<div class="card card-auth p-4 p-md-5">
+    <h2 class="text-center mb-4">Login</h2>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="mb-4">
+                <label for="{{ field.id_for_label }}" class="form-label text-uppercase small text-secondary fw-bold">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger small mt-1 fw-bold">
+                        <i class="bi bi-exclamation-triangle"></i> {{ field.errors|striptags }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <div class="d-grid gap-2 mt-5">
+            <button type="submit" class="btn btn-danger btn-lg fw-bold shadow">
+                ENTRAR NO PALCO
+            </button>
+        </div>
+    </form>
+
+    <div class="text-center mt-4 pt-3 border-top border-secondary">
+        <p class="mb-0">Ainda não faz parte da banda?</p>
+        <a href="{% url 'cadastro' %}" class="text-uppercase">Cadastre-se aqui</a>
+    </div>
+    <div class="text-center mt-3">
+        <a href="/admin/" class="text-secondary small text-decoration-none opacity-50 hover-opacity-100">
+            <small>Área da Produção (Admin)</small>
+        </a>
+    </div>
+</div>
+</div>
+{% endblock content %}
