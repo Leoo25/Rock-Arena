@@ -41,11 +41,9 @@ class ContatoForm(forms.ModelForm):
     class Meta:
         model = Contato
         fields = ['nome', 'email', 'mensagem']
-        # AQUI ESTÁ A MÁGICA: Configura os inputs para ficarem bonitos e do tamanho certo
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Seu nome'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Seu e-mail'}),
-            # 'rows': 4 define a altura. 'style': 'resize: none' impede o usuário de esticar demais
             'mensagem': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Sua mensagem...', 'style': 'resize: vertical; max-height: 200px;'}),
         }
 
